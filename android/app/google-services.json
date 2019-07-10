@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "399930228771",
+    "firebase_url": "https://charcha-87d73.firebaseio.com",
+    "project_id": "charcha-87d73",
+    "storage_bucket": "charcha-87d73.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399930228771:android:3cb526385348f79c",
+        "android_client_info": {
+          "package_name": "org.pepper.charcha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399930228771-5t0de6121824mrp8lo01rsmc7a7a0cqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSEKpnSH4ngFqQeI-IcS3b0rihZeGLCts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399930228771-5t0de6121824mrp8lo01rsmc7a7a0cqt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "399930228771-vt0snbqu1smoegghddtdgpj819arl4af.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.pepper.charcha"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

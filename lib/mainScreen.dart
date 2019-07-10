@@ -1,3 +1,4 @@
+import 'package:charcha/profile.dart';
 import 'package:flutter/material.dart';
 
 class mainScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class _mainScreenState extends State<mainScreen> {
   @override
   Widget build(BuildContext context) {
     final _TabPages = <Widget> [
-      Center(child: Icon(Icons.perm_identity , color: Colors.teal, size: 64.0)),
+      profile(),
       Center(child: Icon(Icons.comment , color: Colors.cyan, size: 64.0)),
     ];
     final _BottomNavBarItems = <BottomNavigationBarItem> [

@@ -1,3 +1,4 @@
+import 'package:charcha/mainScreen.dart';
 import 'package:flutter/material.dart';
 import 'state_widget.dart';
 
@@ -20,7 +21,15 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               RaisedButton(
-                  onPressed: () => StateWidget.of(context).signInWithGoogle(),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => mainScreen()
+                        )
+                    );
+                  },
+                  // onPressed: () => StateWidget.of(context).signInWithGoogle(),
                   padding: EdgeInsets.only(top: 3.0, bottom: 3.0, left: 3.0),
                   color: const Color(0xFFFFFFFF),
                   child: new Row(

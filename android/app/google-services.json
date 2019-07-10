@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "399930228771-kjcgim1a8ipa2tgovm3l3bhb8kdjgslm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.pepper.charcha",
+            "certificate_hash": "04406b170c8b6490fb15ccbf8c1f231188d8fa05"
+          }
+        },
+        {
           "client_id": "399930228771-5t0de6121824mrp8lo01rsmc7a7a0cqt.apps.googleusercontent.com",
           "client_type": 3
         }

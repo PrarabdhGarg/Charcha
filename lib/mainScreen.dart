@@ -1,4 +1,5 @@
 import 'package:charcha/profile.dart';
+import 'package:charcha/Genre.dart';
 import 'package:flutter/material.dart';
 
 class mainScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _mainScreenState extends State<mainScreen> {
     final _TabPages = <Widget> [
       profile(),
       Center(child: Icon(Icons.comment , color: Colors.cyan, size: 64.0)),
+      Genre(),
     ];
     final _BottomNavBarItems = <BottomNavigationBarItem> [
       BottomNavigationBarItem(
@@ -23,8 +25,13 @@ class _mainScreenState extends State<mainScreen> {
       BottomNavigationBarItem(
         icon: Icon(Icons.comment , color: Colors.white,),
         title: Text("Feed"),
-      )
+      ),
+    BottomNavigationBarItem(
+        icon: Icon(Icons.category , color: Colors.white,),
+        title: Text("Genre")
+      ),
     ];
+    assert(_TabPages.length == _BottomNavBarItems.length);
     final bottomNavBar = BottomNavigationBar(
       items: _BottomNavBarItems,
       currentIndex: _currentIndex,

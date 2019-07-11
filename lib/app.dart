@@ -1,3 +1,4 @@
+import 'package:charcha/mainScreen.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'login.dart';
@@ -7,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'GoogleSignIn',
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       routes: {
         '/': (context) => HomeScreen(),
         '/login': (context) => LoginScreen(),

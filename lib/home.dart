@@ -1,3 +1,4 @@
+import 'package:charcha/mainScreen.dart';
 import 'package:flutter/material.dart';
 import 'state.dart';
 import 'state_widget.dart';
@@ -51,7 +52,7 @@ class HomeScreenState extends State<HomeScreen> {
     } else if (!appState.isLoading && appState.user == null) {
       return new LoginScreen();
     } else {
-      return _buildStories();
+      return mainScreen();
     }
   }
 

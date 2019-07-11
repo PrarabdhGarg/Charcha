@@ -1,4 +1,7 @@
+import 'package:charcha/feed.dart';
 import 'package:flutter/material.dart';
+
+import 'dataClasses.dart';
 
 class Genre extends StatefulWidget {
   @override
@@ -7,6 +10,7 @@ class Genre extends StatefulWidget {
 
 class _Genre extends State<Genre> {
   String selectedGenre = null;
+  List<feedModel> feedList = [new feedModel() , new feedModel() , new feedModel(), new feedModel(),  new feedModel()];
   List<String> genreList = ["Politics" , "Sports" , "Science" , "Technlogy" , "Terrorism" , "Religion" , "Astrnomy"];
 
   @override
@@ -14,7 +18,12 @@ class _Genre extends State<Genre> {
     if(selectedGenre == null) {
       return genreListView();
     }
-    return genreFeedView();
+    return ListView.builder(
+      itemCount: feedList.length,
+      itemBuilder: (BuildContext context , int i) {
+        return getFeedWidget(feedList[i]);
+      }
+    );
   }
 
   Widget genreListView() {
@@ -44,10 +53,6 @@ class _Genre extends State<Genre> {
           )
       ).toList(),
     );
-  }
-
-  Widget genreFeedView() {
-    
   }
 
 }

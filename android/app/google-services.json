@@ -1,50 +1,43 @@
 {
   "project_info": {
-    "project_number": "399930228771",
-    "firebase_url": "https://charcha-87d73.firebaseio.com",
-    "project_id": "charcha-87d73",
-    "storage_bucket": "charcha-87d73.appspot.com"
+    "project_number": "515733254144",
+    "firebase_url": "https://charcha-f77aa.firebaseio.com",
+    "project_id": "charcha-f77aa",
+    "storage_bucket": "charcha-f77aa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:399930228771:android:3cb526385348f79c",
+        "mobilesdk_app_id": "1:515733254144:android:d34c283f4a35f36a",
         "android_client_info": {
-          "package_name": "org.pepper.charcha"
+          "package_name": "com.example.charcha"
         }
       },
       "oauth_client": [
         {
-          "client_id": "399930228771-kjcgim1a8ipa2tgovm3l3bhb8kdjgslm.apps.googleusercontent.com",
+          "client_id": "515733254144-ujmoduc622hc4l713qopu6ocelvtemmh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "org.pepper.charcha",
+            "package_name": "com.example.charcha",
             "certificate_hash": "04406b170c8b6490fb15ccbf8c1f231188d8fa05"
           }
         },
         {
-          "client_id": "399930228771-5t0de6121824mrp8lo01rsmc7a7a0cqt.apps.googleusercontent.com",
+          "client_id": "515733254144-ebekb2ou5bnhc2kjeg1frevh6rn6iknp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCSEKpnSH4ngFqQeI-IcS3b0rihZeGLCts"
+          "current_key": "AIzaSyDz3ZLYiz0teYQ8TwBn_DRtbg_JSYROXRg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "399930228771-5t0de6121824mrp8lo01rsmc7a7a0cqt.apps.googleusercontent.com",
+              "client_id": "515733254144-ebekb2ou5bnhc2kjeg1frevh6rn6iknp.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "399930228771-vt0snbqu1smoegghddtdgpj819arl4af.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "org.pepper.charcha"
-              }
             }
           ]
         }

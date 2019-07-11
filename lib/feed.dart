@@ -61,7 +61,8 @@ Widget getFeedWidget(feedModel item) {
                             MaterialTapTargetSize.shrinkWrap,
                       ),
                       margin: EdgeInsets.all(5.0),
-                    ))
+                    )
+                ),
               ],
             )
           ],

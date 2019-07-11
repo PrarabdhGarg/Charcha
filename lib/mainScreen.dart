@@ -1,3 +1,5 @@
+import 'package:charcha/dataClasses.dart';
+import 'package:charcha/feed.dart';
 import 'package:charcha/profile.dart';
 import 'package:charcha/Genre.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +11,24 @@ class mainScreen extends StatefulWidget {
 
 class _mainScreenState extends State<mainScreen> {
   int _currentIndex = 1;
+  List<feedModel> feedList = [feedModel() , feedModel() , feedModel() , feedModel() , feedModel()];
 
   @override
   Widget build(BuildContext context) {
     final _TabPages = <Widget> [
       profile(),
-      Center(child: Icon(Icons.comment , color: Colors.cyan, size: 64.0)),
+      ListView.builder(
+        itemCount: feedList.length,
+        itemBuilder: (BuildContext context , int i) {
+          return getFeedWidget(feedList[i]);
+        },
+      ),
+      ListView.builder(
+        itemCount: feedList.length,
+        itemBuilder: (BuildContext context , int i) {
+          return getFeedWidget(feedList[i]);
+        }
+      ),
       Genre(),
     ];
     final _BottomNavBarItems = <BottomNavigationBarItem> [
@@ -25,6 +39,10 @@ class _mainScreenState extends State<mainScreen> {
       BottomNavigationBarItem(
         icon: Icon(Icons.comment , color: Colors.white,),
         title: Text("Feed"),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.trending_up),
+        title: Text("Trending")
       ),
     BottomNavigationBarItem(
         icon: Icon(Icons.category , color: Colors.white,),

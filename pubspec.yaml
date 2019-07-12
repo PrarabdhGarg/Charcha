@@ -41,6 +41,8 @@ flutter:
   uses-material-design: true
   assets:
     - images/profile.png
+    - images/login.png
+    - images/googleLoginButton.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

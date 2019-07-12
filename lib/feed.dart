@@ -1,5 +1,8 @@
+import 'package:audioplayer/audioplayer.dart';
 import 'package:charcha/dataClasses.dart';
 import 'package:flutter/material.dart';
+
+import 'audioControl.dart';
 
 Widget getFeedWidget(feedModel item) {
   return Row(
@@ -24,6 +27,7 @@ Widget getFeedWidget(feedModel item) {
             Center(
               child: Text(item.description),
             ),
+            audioControl(item.url),
             Row(
               children: <Widget>[
                 Expanded(
@@ -51,17 +55,17 @@ Widget getFeedWidget(feedModel item) {
                       margin: EdgeInsets.all(5.0),
                     )),
                 Expanded(
-                    flex: 1,
-                    child: Container(
-                      child: RawMaterialButton(
-                        child: Text("Share"),
-                        onPressed: null,
-                        fillColor: Colors.cyan,
-                        materialTapTargetSize:
-                            MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      margin: EdgeInsets.all(5.0),
-                    )
+                  flex: 1,
+                  child: Container(
+                    child: RawMaterialButton(
+                      child: Text("Share"),
+                      onPressed: null,
+                      fillColor: Colors.cyan,
+                      materialTapTargetSize:
+                          MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    margin: EdgeInsets.all(5.0),
+                  )
                 ),
               ],
             )

@@ -7,5 +7,9 @@ class feedModel {
   String name = "Default Name";
   String title = "Default Title";
   String description = "This is a description that can be at max 120 charecters long";
-  String url = "";
+  String url = "https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.mp4";
+}
+
+enum audioPlayerState{
+  Playing,Stopped
 }

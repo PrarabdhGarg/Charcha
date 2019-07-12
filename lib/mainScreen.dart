@@ -17,18 +17,8 @@ class _mainScreenState extends State<mainScreen> {
   Widget build(BuildContext context) {
     final _TabPages = <Widget> [
       profile(),
-      ListView.builder(
-        itemCount: feedList.length,
-        itemBuilder: (BuildContext context , int i) {
-          return getFeedWidget(feedList[i]);
-        },
-      ),
-      ListView.builder(
-        itemCount: feedList.length,
-        itemBuilder: (BuildContext context , int i) {
-          return getFeedWidget(feedList[i]);
-        }
-      ),
+      getFeedListWidget(feedList, context),
+      getFeedListWidget(feedList, context),
       Genre(),
     ];
     final _BottomNavBarItems = <BottomNavigationBarItem> [

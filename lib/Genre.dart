@@ -18,12 +18,7 @@ class _Genre extends State<Genre> {
     if(selectedGenre == null) {
       return genreListView();
     }
-    return ListView.builder(
-      itemCount: feedList.length,
-      itemBuilder: (BuildContext context , int i) {
-        return getFeedWidget(feedList[i]);
-      }
-    );
+    return getFeedListWidget(feedList, this.context);
   }
 
   Widget genreListView() {

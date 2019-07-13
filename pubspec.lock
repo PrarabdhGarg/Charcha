@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
+  audio_recorder:
+    dependency: "direct main"
+    description:
+      name: audio_recorder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   audioplayer:
     dependency: "direct main"
     description:
@@ -43,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  file:
+    dependency: transitive
+    description:
+      name: file
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.8+1"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -74,6 +88,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0+1"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.15.8"
   matcher:
     dependency: transitive
     description:

@@ -23,6 +23,7 @@ dependencies:
   firebase_core: ^0.4.0+6
   google_sign_in: ^3.2.2
   audioplayer: ^0.5.2
+  audio_recorder: ^1.0.1
 
 dev_dependencies:
   flutter_test:

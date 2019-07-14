@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:charcha/config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dataClasses.dart';
@@ -12,14 +12,15 @@ class profile extends StatefulWidget {
 }
 
 class _profileState extends State<profile> {
-  Future<User> currentUser;
-  String baseUrl = "https://dush-t-pprvoice.herokuapp.com";
-  String authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDJhY2JlODc2NTA3MzAwMTc5MGNiZjAiLCJpYXQiOjE1NjMwOTc2NTR9.6U5FIArEk-M_356plCGqNsax_vAx0Mru9PGpm-8H4OI";
+  User currentUser;
 
   @override
   void initState() {
     super.initState();
-    currentUser = fetchUserData();
+    if(config.userProfile == null)
+      fetchUserData();
+    else
+      currentUser = config.userProfile;
   }
 
   final _TabPages = <Widget> [
@@ -34,11 +35,7 @@ class _profileState extends State<profile> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<User>(
-      future: currentUser,
-      builder: (context , snapshot){
-        if(snapshot.hasData){
-          return Column(
+    return Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -55,7 +52,7 @@ class _profileState extends State<profile> {
                   Column(
                     children: <Widget>[
                       Container(
-                        child: Text(snapshot.data.name),
+                        child: Text(currentUser.name),
                         alignment: Alignment.center,
                       ),
                       Container(
@@ -85,21 +82,17 @@ class _profileState extends State<profile> {
               )
             ],
           );
-        }else if(snapshot.hasError){
-          return Center(
-            child: Text("An Error Occoured ${snapshot.error}"),
-          );
         }
-        return Center(child: CircularProgressIndicator(),);
-      },
-    );
-  }
 
-  Future<User> fetchUserData() async {
-    final response = await http.get(baseUrl+"/users/me", headers: {HttpHeaders.authorizationHeader: "Bearer $authToken"},);
+
+  Future<Null> fetchUserData() async {
+    final response = await http.get(config.baseUrl+"/users/me", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
     print("Response = ${response.body.toString()}");
     if(response.statusCode == 200){
-      return User.fromJson(json.decode(response.body));
+      config.userProfile = User.fromJson(json.decode(response.body));
+      setState(() {
+        this.currentUser = config.userProfile;
+      });
     }else{
       print("Error occoured in fetching user profile");
       throw Exception('Failed to load post');

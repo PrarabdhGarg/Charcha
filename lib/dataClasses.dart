@@ -13,3 +13,53 @@ class feedModel {
 enum audioPlayerState{
   Playing,Stopped
 }
+
+// Dataclass for the user object that is received from the backend
+class User {
+  List<dynamic> followers;
+  List<dynamic> following;
+  List<dynamic> voicePosts;
+  bool profileIsPrivate;
+  String id;
+  String name;
+  String username;
+  String email;
+  int v;
+
+  User({
+    this.followers,
+    this.following,
+    this.voicePosts,
+    this.profileIsPrivate,
+    this.id,
+    this.name,
+    this.username,
+    this.email,
+    this.v,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) => new User(
+    followers: new List<dynamic>.from(json["followers"].map((x) => x)),
+    following: new List<dynamic>.from(json["following"].map((x) => x)),
+    voicePosts: new List<dynamic>.from(json["voice_posts"].map((x) => x)),
+    profileIsPrivate: json["profile_is_private"],
+    id: json["_id"],
+    name: json["name"],
+    username: json["username"],
+    email: json["email"],
+    v: json["__v"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "followers": new List<dynamic>.from(followers.map((x) => x)),
+    "following": new List<dynamic>.from(following.map((x) => x)),
+    "voice_posts": new List<dynamic>.from(voicePosts.map((x) => x)),
+    "profile_is_private": profileIsPrivate,
+    "_id": id,
+    "name": name,
+    "username": username,
+    "email": email,
+    "__v": v,
+  };
+
+}

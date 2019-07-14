@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:charcha/config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dataClasses.dart';
 import 'state.dart';
 import 'auth.dart';
+import 'package:http/http.dart' as http;
 
 class StateWidget extends StatefulWidget {
   final StateModel state;
@@ -54,6 +58,29 @@ class _StateWidgetState extends State<StateWidget> {
     }
   }
 
+  Future<Null> manualSignIn(String username , String password) async {
+    setState(() {
+      state.isLoading = true;
+    });
+    http.post(config.baseUrl+"/users/login", body: json.encode({"username": username,"password": password}), headers: {"Content-Type": "application/json"}).then((http.Response response){
+      if(response.statusCode == 200)
+        {
+          var body = json.decode(response.body);
+          config.jwt = body["token"];
+          print("Token set to "+ config.jwt);
+          setState(() {
+            state.isLoading = false;
+          });
+          config.userProfile = User.fromJson(body["user"]);
+        }else{
+        setState(() {
+          state.isLoading = false;
+        });
+        print("Error in signing up "+ response.body.toString() + " " + response.statusCode.toString());
+        throw Exception("Error in signing in");
+      }
+    });
+  }
 
   Future<Null> signInWithGoogle() async {
     if (googleAccount == null) {

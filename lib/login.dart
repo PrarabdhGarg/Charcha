@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:charcha/config.dart';
 import 'package:charcha/mainScreen.dart';
 import 'package:charcha/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +12,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final userNameController = new TextEditingController(text: "un2");
+  final passwordController = new TextEditingController(text: "lolmao12345");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,12 +71,56 @@ class _LoginScreenState extends State<LoginScreen> {
           Flexible(
             flex: 5,
             child: Center(
-              child: FlatButton(
-                padding: EdgeInsets.all(64),
-                onPressed: () => StateWidget.of(context).signInWithGoogle(),
-                child: Image(
-                  image: AssetImage('images/googleLoginButton.jpg')
-                )
+              child: Column(
+                children: <Widget>[
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                        child: TextField(
+                          controller: userNameController,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                              hintText: "username"
+                          ),
+                        ),
+                      ),
+                    ),
+              Flexible(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                          hintText: "password"
+                      ),
+                    ),
+                  )
+              ),
+              Flexible(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: FlatButton(
+                    onPressed: () {
+                      StateWidget.of(context).manualSignIn(userNameController.text, passwordController.text);
+                    },
+                    child: Text("Sign In")
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: FlatButton(
+                    onPressed: () => StateWidget.of(context).signInWithGoogle(),
+                    child: Image(
+                        image: AssetImage('images/googleLoginButton.jpg')
+                    )
+                ),
+              ),],
               ),
             ),
           )
@@ -81,3 +128,15 @@ class _LoginScreenState extends State<LoginScreen> {
       )
     );
 }}
+
+
+/*
+Center(
+child: Column(
+children: <Widget>[
+
+
+)
+],
+)
+)*/

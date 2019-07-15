@@ -108,8 +108,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       StateWidget.of(context).manualSignIn(userNameController.text, passwordController.text);
                     },
-                    child: Text("Sign In")
+                    child: Text("Sign In"),
+                    color: Color(0xFFFF6969),
                   ),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Container(
+                            padding: EdgeInsets.all(16),
+                            child: Divider(
+                              height: 5,
+                              color: Colors.black,
+                            ),
+                        )
+                    ),
+                    Text("OR"),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        child: Divider(
+                          height: 5,
+                          color: Colors.black,
+                        ),
+                      )
+                    )
+                  ],
                 ),
               ),
               Flexible(
@@ -128,15 +155,3 @@ class _LoginScreenState extends State<LoginScreen> {
       )
     );
 }}
-
-
-/*
-Center(
-child: Column(
-children: <Widget>[
-
-
-)
-],
-)
-)*/

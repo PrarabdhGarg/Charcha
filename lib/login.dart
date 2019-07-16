@@ -29,9 +29,11 @@ class _LoginScreenState extends State<LoginScreen> {
             flex: 2,
             child: Stack(
               children: <Widget>[
-                Transform.translate(
-                  offset: Offset(0, -5),
-                  child: Container(
+                Container(
+                height: 16,
+                color: Color(0xFF9600ff),
+              ),
+                Container(
                     // color: Colors.deepPurple,
                     decoration: new BoxDecoration(
                         image: new DecorationImage(
@@ -39,7 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                     ),
                   ),
-                ),
                 Positioned(
                   top: 20,
                   left: 20,
@@ -114,6 +115,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Flexible(
+                flex: 2,
+                child: Container(),
+              ),
+              Flexible(
                 flex: 1,
                 child: Row(
                   children: <Widget>[
@@ -145,13 +150,51 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () => StateWidget.of(context).signInWithGoogle(),
                     child: Image(
                         image: AssetImage('images/googleLoginButton.jpg')
-                    )
-                ),
-              ),],
+                      )
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Center(
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            flex: 1,
+                            child: Container(),
+                          ),
+                          Flexible(
+                            flex:2,
+                            fit: FlexFit.tight,
+                            child: Text(
+                              "Don't have an account?",
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                          Container(width: 4,),
+                          Flexible(
+                            flex:2,
+                            fit: FlexFit.tight,
+                            child: GestureDetector(
+                              onTap: (){
+                                print("Entrers Gesture detector");
+                                Navigator.of(context).popAndPushNamed("/signUp");
+                              },
+                              child: Text(
+                                "SignUp" ,
+                                style: TextStyle(color: Colors.lightBlue[400]),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           )
         ],
       )
     );
-}}
+  }
+}

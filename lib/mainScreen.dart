@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:charcha/dataClasses.dart';
 import 'package:charcha/feed.dart';
 import 'package:charcha/profile.dart';
 import 'package:charcha/Genre.dart';
 import 'package:flutter/material.dart';
+import 'package:charcha/config.dart';
+import 'package:http/http.dart' as http;
 
 import 'customAudioRecorder.dart';
 
@@ -89,7 +93,7 @@ class _mainScreenState extends State<mainScreen> {
                   child: Text('Settings'),
                 ),
                 PopupMenuItem(
-                  child: Text('More'),
+                  child: GestureDetector(child: Text('Logout'),onTap:() => logoutUser(),),
                 ),
               ];
             },
@@ -103,4 +107,19 @@ class _mainScreenState extends State<mainScreen> {
       bottomNavigationBar: bottomNavBar,
     );
   }
+
+  Future<Null> logoutUser() async {
+    if(config.jwt != ""){
+      http.post(config.baseUrl+"/users/logout" , headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt}).then((http.Response response){
+        print(response.statusCode.toString()+"\n"+response.body);
+        if(response.statusCode == 200) {
+          config.jwt = "";
+          config.userProfile = null;
+          // Todo : Handle navigation properly
+          Navigator.popAndPushNamed(context, "/login");
+        }
+      });
+    }
+  }
+
 }

@@ -48,11 +48,19 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildContent() {
+    print("JWT = " + config.jwt);
+    if(config.jwt != "") {
+      print("First Condioton");
+      return mainScreen();
+    }
     if (appState.isLoading) {
+      print("Second Condition");
       return _buildLoadingIndicator();
     } else if (!appState.isLoading && (appState.user == null && config.jwt == "")) {
+      print("Third Condition");
       return new LoginScreen();
     } else {
+      print("Fourth Condition");
       return mainScreen();
     }
   }

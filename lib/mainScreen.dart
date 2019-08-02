@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:charcha/dataClasses.dart';
@@ -19,14 +20,25 @@ class _mainScreenState extends State<mainScreen> {
   int _currentIndex = 1;
   List<feedModel> feedList = [feedModel() , feedModel() , feedModel() , feedModel() , feedModel()];
   GlobalKey<customAudioRecorderState> _keyRecorder = GlobalKey();
+  User currentUser;
+  final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    if(config.userProfile == null)
+      fetchUserData();
+    else
+      currentUser = config.userProfile;
+  }
 
   @override
   Widget build(BuildContext context) {
     final _TabPages = <Widget> [
-      profile(),
-      getFeedListWidget(feedList, context),
-      getFeedListWidget(feedList, context),
-      Genre(),
+      profile(currentUser),
+      FeedListWidget(feedList),
+      FeedListWidget(feedList),
+      Genre(selectMultiple: false,),
     ];
     final _BottomNavBarItems = <BottomNavigationBarItem> [
       BottomNavigationBarItem(
@@ -64,6 +76,7 @@ class _mainScreenState extends State<mainScreen> {
     );
 
     return Scaffold(
+      key: _scaffoldState,
       appBar: AppBar(
         backgroundColor: Colors.white,
         // There is an empty container passed as I don't want the default back button that appears on the app bar
@@ -119,6 +132,20 @@ class _mainScreenState extends State<mainScreen> {
           Navigator.popAndPushNamed(context, "/login");
         }
       });
+    }
+  }
+
+  Future<Null> fetchUserData() async {
+    final response = await http.get(config.baseUrl+"/users/me", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
+    print("Response = ${response.body.toString()}");
+    if(response.statusCode == 200){
+      config.userProfile = User.fromJson(json.decode(response.body));
+      setState(() {
+        this.currentUser = config.userProfile;
+      });
+    }else{
+      print("Error occoured in fetching user profile");
+      throw Exception('Failed to load post');
     }
   }
 

@@ -11,7 +11,7 @@ class feedModel {
 }
 
 enum audioPlayerState{
-  Playing,Stopped
+  Playing,Stopped,None,Loading
 }
 
 // Dataclass for the user object that is received from the backend

@@ -18,17 +18,20 @@ class Author {
   String name;
   String username;
   String avatar;
+  String id;
 
   Author({
     this.name,
     this.username,
-    this.avatar
+    this.avatar,
+    this.id,
   });
 
   factory Author.fromJSON(Map<String, dynamic> json) => new Author(
     name: json["name"],
     username: json["username"],
-    avatar: json["avatarURL"]
+    avatar: json["avatarURL"],
+    id: json["id"]
   );
 
   Map<String, dynamic> toJSON() => {

@@ -1,54 +1,68 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:audioplayer/audioplayer.dart';
 import 'package:charcha/dataClasses.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:charcha/config.dart';
 import 'audioControl.dart';
 
 class FeedListWidget extends StatefulWidget {
-  List<feedModel> feedItems;
-
-  FeedListWidget(this.feedItems,);
-
   @override
-  _FeedListWidgetState createState() => _FeedListWidgetState(feedItems);
+  _FeedListWidgetState createState() => _FeedListWidgetState();
 }
 
 class _FeedListWidgetState extends State<FeedListWidget> {
-  List<feedModel> feedItems;
   AudioPlayer audioPlayer;
+  Posts newsFeed = null;
   String currentSong = "";
   audioPlayerState songState;
-
-  _FeedListWidgetState(this.feedItems);
 
   @override
   void initState() {
    super.initState();
+   getNewsFeed();
    audioPlayer = new AudioPlayer();
    songState = audioPlayerState.None;
   }
 
   @override
   void dispose() {
-    super.dispose();
     audioPlayer = null;
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return getFeedListWidget(feedItems, this.context);
+    return getFeedListWidget(newsFeed, this.context);
   }
 
-  Widget getFeedListWidget(List<feedModel> items , BuildContext context) {
+  Future<Null> getNewsFeed() async {
+    //TODO: Update URL to get newsfeed instead of post detail
+    final response = await http.get(config.baseUrl+"/voice_post/get_details/5d456523c4fe290017d6b05a", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
+    print("Response = ${response.body.toString()}");
+    if(response.statusCode == 200) {
+      setState(() {
+        print("Entered Set State");
+        this.newsFeed = new Posts(posts: [Post.fromJSON(json.decode(response.body))]);
+        // this.newsFeed = Posts.fromJSON(json.decode(response.body));
+      });
+    }else {
+      print("Error occoured while fetching newsFeed");
+    }
+  }
+
+  Widget getFeedListWidget(Posts items , BuildContext context) {
     return Container(
       color: Colors.grey,
-      child: ListView.builder(
-          itemCount: items.length,
+      child: newsFeed != null ? ListView.builder(
+          itemCount: items.posts.length,
           itemBuilder: (BuildContext context , int i) {
             return GestureDetector(
               onTap: () {
                 updateBottomSheet(context);
-                play(items[i].url , context);
+                play((config.baseUrl+items.posts[i].contentURL) , context);
               } ,
               child: Container(
                 padding: EdgeInsets.all(8),
@@ -70,13 +84,18 @@ class _FeedListWidgetState extends State<FeedListWidget> {
                         Positioned(
                           top: 10,
                           left: 10,
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            margin: EdgeInsets.all(16),
-                            decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(image: AssetImage('images/nature.jpg')),
+                          child: GestureDetector(
+                            onTap: () {
+                              openProfile(items.posts[i].id);
+                            },
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              margin: EdgeInsets.all(16),
+                              decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(image: NetworkImage(config.baseUrl+items.posts[i].author.avatar)),
+                              ),
                             ),
                           ),
                         ),
@@ -91,41 +110,45 @@ class _FeedListWidgetState extends State<FeedListWidget> {
                               children: <Widget>[
                                 Flexible(
                                   fit: FlexFit.loose,
-                                  child: Text(items[i].title, style: TextStyle(fontWeight: FontWeight.w900),),
+                                  child: Text(items.posts[i].title, style: TextStyle(fontWeight: FontWeight.w900),),
                                 ),
                                 VerticalDivider(),
                                 Flexible(
                                   flex: 1,
-                                  child: Text(items[i].userName, style: TextStyle(color: Colors.lightBlue, fontSize: 12),),
+                                  child: Text(items.posts[i].author.username, style: TextStyle(color: Colors.lightBlue, fontSize: 12),),
                                 )
                               ],
                             ),
                             Container(height: 8,),
-                            Center(
-                              child: Text(items[i].description, overflow: TextOverflow.ellipsis, maxLines: 3,),
-                            ),
+                            Text(items.posts[i].caption, overflow: TextOverflow.ellipsis, maxLines: 3,),
                             Container(height: 8,),
                             // audioControl(items[i].url),
                             GestureDetector(
                               onTap: () {
-                                print("Row Touvhed");
+                                print("Row Touched");
                               },
                               child: Row(
                                 children: <Widget>[
                                   Expanded(
                                       flex: 1,
-                                      child: Row(
-                                        children: <Widget>[
-                                          Flexible(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          print("Like Button Touched");
+                                          likePost(newsFeed.posts[i].id, i);
+                                        },
+                                        child: Row(
+                                          children: <Widget>[
+                                            Flexible(
+                                                flex: 1,
+                                                child: Icon(Icons.thumbs_up_down , color: Color(0xFFFF6969),)
+                                            ),
+                                            Container(width: 4,),
+                                            Flexible(
                                               flex: 1,
-                                              child: Icon(Icons.thumbs_up_down , color: Color(0xFFFF6969),)
-                                          ),
-                                          Container(width: 4,),
-                                          Flexible(
-                                            flex: 1,
-                                            child: Text("01" , style: TextStyle(color: Colors.grey),),
-                                          )
-                                        ],
+                                              child: Text(items.posts[i].likes.toString() , style: TextStyle(color: Colors.grey),),
+                                            )
+                                          ],
+                                        ),
                                       )
                                   ),
                                   Expanded(
@@ -171,6 +194,8 @@ class _FeedListWidgetState extends State<FeedListWidget> {
               ),
             );
           }
+      ) : Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
@@ -208,6 +233,25 @@ class _FeedListWidgetState extends State<FeedListWidget> {
       });
     }
 
+  }
+
+  Future<void> likePost(String id, int position) async {
+    print("Entered like function with"+config.baseUrl+"/voice_posts/${id}/like_unlike");
+    var request = http.post(config.baseUrl+"/voice_posts/${id}/like_unlike", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},).then((http.Response response) {
+      if(response.statusCode == 200){
+        print("Like Successful");
+        setState(() {
+          newsFeed.posts[position].likes += 1;
+        });
+      }else{
+        print("Response error = ${response.statusCode}");
+        print("Response Body = ${response.body}");
+      }
+    });
+  }
+
+  Future<void> openProfile(String id) {
+    // TODO: Learn how to interact with bottom navigation bar from the page
   }
 
   void updateBottomSheet(BuildContext context) {

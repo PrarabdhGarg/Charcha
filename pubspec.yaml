@@ -25,6 +25,11 @@ dependencies:
   audioplayer: ^0.5.2
   audio_recorder: ^1.0.1
   http: ^0.12.0+2
+  path_provider: ^0.4.1
+  path: ^1.6.2
+  dio: ^2.1.13
+  flutter_sound: ^1.4.2
+
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +50,8 @@ flutter:
     - images/profile.png
     - images/login.png
     - images/googleLoginButton.jpg
+    - images/nature.jpg
+    - images/check.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

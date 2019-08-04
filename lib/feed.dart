@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:charcha/config.dart';
 import 'audioControl.dart';
+import 'otherProfile.dart';
 
 class FeedListWidget extends StatefulWidget {
   @override
@@ -86,7 +87,7 @@ class _FeedListWidgetState extends State<FeedListWidget> {
                           left: 10,
                           child: GestureDetector(
                             onTap: () {
-                              openProfile(items.posts[i].id);
+                              openProfile(items.posts[i].author.id);
                             },
                             child: Container(
                               width: 80,
@@ -251,7 +252,7 @@ class _FeedListWidgetState extends State<FeedListWidget> {
   }
 
   Future<void> openProfile(String id) {
-    // TODO: Learn how to interact with bottom navigation bar from the page
+    Navigator.push(context, MaterialPageRoute(builder: (context) => otherProfile(id)));
   }
 
   void updateBottomSheet(BuildContext context) {

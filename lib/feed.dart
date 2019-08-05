@@ -40,14 +40,13 @@ class _FeedListWidgetState extends State<FeedListWidget> {
   }
 
   Future<Null> getNewsFeed() async {
-    //TODO: Update URL to get newsfeed instead of post detail
-    final response = await http.get(config.baseUrl+"/voice_post/get_details/5d456523c4fe290017d6b05a", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
+    final response = await http.get(config.baseUrl+"/newsfeed?skip=0&limit=2", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
     print("Response = ${response.body.toString()}");
     if(response.statusCode == 200) {
       setState(() {
         print("Entered Set State");
-        this.newsFeed = new Posts(posts: [Post.fromJSON(json.decode(response.body))]);
-        // this.newsFeed = Posts.fromJSON(json.decode(response.body));
+        // this.newsFeed = Posts(posts: [Post.fromJSON(json.decode(response.body))]);
+        this.newsFeed = Posts.fromJSON(json.decode(response.body));
       });
     }else {
       print("Error occoured while fetching newsFeed");

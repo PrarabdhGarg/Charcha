@@ -19,20 +19,19 @@ class _profileState extends State<profile> {
   User profileUser;
   bool isOwnProfile;
   static int posts,followers,following;
+  User user = null;
 
   _profileState(this.profileUser);
 
   @override
   void initState() {
+    fetchUserData();
     super.initState();
     if(profileUser.username == config.userProfile.username){
       isOwnProfile = true;
     } else {
       isOwnProfile = false;
     }
-    posts = profileUser.voicePosts.length;
-    followers = profileUser.followers.length;
-    following = profileUser.following.length;
   }
 
   final _TabPages = <Widget> [
@@ -49,7 +48,10 @@ class _profileState extends State<profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    posts = profileUser.voicePosts.length;
+    followers = profileUser.followers.length;
+    following = profileUser.following.length;
+    return user == null ? Center(child: CircularProgressIndicator(),) : Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -210,6 +212,22 @@ class _profileState extends State<profile> {
           ),
         )
       );
+    }
+  }
+
+  Future<Null> fetchUserData() async {
+    print("Entered Profile request");
+    final response = await http.get(config.baseUrl+"/users/me", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
+    print("Profile Response = ${response.body.toString()}");
+    if(response.statusCode == 200){
+      config.userProfile = User.fromJson(json.decode(response.body));
+      print("Profile = ${config.userProfile.following.toString()}\n${config.userProfile.followers.toString()}\n${config.userProfile.voicePosts.toString()}");
+      setState(() {
+        this.user = config.userProfile;
+      });
+    }else{
+      print("Error occoured in fetching user profile");
+      throw Exception('Failed to load post');
     }
   }
 }

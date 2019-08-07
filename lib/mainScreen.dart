@@ -19,7 +19,6 @@ class mainScreen extends StatefulWidget {
 class _mainScreenState extends State<mainScreen> {
   int _currentIndex = 1;
   List<feedModel> feedList = [feedModel() , feedModel() , feedModel() , feedModel() , feedModel()];
-  GlobalKey<customAudioRecorderState> _keyRecorder = GlobalKey();
   User currentUser;
   final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey();
 
@@ -36,8 +35,8 @@ class _mainScreenState extends State<mainScreen> {
   Widget build(BuildContext context) {
     final _TabPages = <Widget> [
       profile(currentUser),
-      FeedListWidget(feedList),
-      FeedListWidget(feedList),
+      FeedListWidget(),
+      FeedListWidget(),
       Genre(selectMultiple: false,),
     ];
     final _BottomNavBarItems = <BottomNavigationBarItem> [
@@ -97,7 +96,12 @@ class _mainScreenState extends State<mainScreen> {
                 ));
               }
           ),
-          customAudioRecorder(),
+          IconButton(
+              icon: Icon(Icons.add_circle , color: Color(0xFFFF6969),),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => customAudioRecorder()));
+              }
+          ),
           PopupMenuButton(
            child: Icon(Icons.more_vert , color: Color(0xFFFF6969),),
             itemBuilder: (BuildContext context) {
@@ -136,8 +140,9 @@ class _mainScreenState extends State<mainScreen> {
   }
 
   Future<Null> fetchUserData() async {
+    print("Entered Profile request");
     final response = await http.get(config.baseUrl+"/users/me", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
-    print("Response = ${response.body.toString()}");
+    print("Profile Response = ${response.body.toString()}");
     if(response.statusCode == 200){
       config.userProfile = User.fromJson(json.decode(response.body));
       setState(() {

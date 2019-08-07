@@ -7,8 +7,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final userNameController = new TextEditingController();
-  final passwordController = new TextEditingController();
+  final userNameController = new TextEditingController(text: "un2");
+  final passwordController = new TextEditingController(text: "lolmao12345");
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       top: 5,
                       right: 5,
                       child: FlatButton(
-                        onPressed: null,
+                        onPressed: () {
+                          Navigator.popUntil(context, ModalRoute.withName("/"));
+                          Navigator.pushNamed(context, "/main");
+                        },
                         child: Text(
                           "Skip",
                           style: TextStyle(color: Colors.white

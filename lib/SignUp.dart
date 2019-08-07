@@ -6,6 +6,7 @@ import 'package:charcha/config.dart';
 
 import 'Genre.dart';
 import 'dataClasses.dart';
+import 'languageSelectionPage.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final nameController = new TextEditingController();
-  final usernameController = new TextEditingController();
+  final usernameController = new TextEditingController(text: "pass");
   final emailController = new TextEditingController();
   final passwordController = new TextEditingController();
   // GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey();
@@ -174,6 +175,6 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<Null> navigateToNextPage(BuildContext context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Genre(selectMultiple: true,)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => languageSelectionPage()));
   }
 }

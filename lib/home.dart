@@ -4,6 +4,7 @@ import 'state.dart';
 import 'package:charcha/config.dart';
 import 'state_widget.dart';
 import 'login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   StateModel appState;
+  bool retrived = false;
 
   Widget _buildStories({Widget body}) {
     return Scaffold(
@@ -47,7 +49,18 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<Null> retriveJWT() async {
+    retrived = true;
+    print("Entered JWT Retrival");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    config.jwt = prefs.getString("JWT") ?? "";
+    print("Retrived JWT = ${config.jwt}");
+    _buildContent();
+  }
+
   Widget _buildContent() {
+    if(!retrived)
+      retriveJWT();
     print("JWT = " + config.jwt);
     if(config.jwt != "") {
       print("First Condioton");

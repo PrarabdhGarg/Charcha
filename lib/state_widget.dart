@@ -5,6 +5,7 @@ import 'package:charcha/config.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dataClasses.dart';
 import 'state.dart';
 import 'auth.dart';
@@ -67,6 +68,7 @@ class _StateWidgetState extends State<StateWidget> {
         {
           var body = json.decode(response.body);
           config.jwt = body["token"];
+          saveJWT();
           print("Token set to "+ config.jwt);
           setState(() {
             state.isLoading = false;
@@ -103,6 +105,14 @@ class _StateWidgetState extends State<StateWidget> {
       data: this,
       child: widget.child,
     );
+  }
+
+  Future<Null> saveJWT() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(config.jwt != "") {
+      await prefs.setString("JWT", config.jwt);
+      print("JWT Saved");
+    }
   }
 }
 

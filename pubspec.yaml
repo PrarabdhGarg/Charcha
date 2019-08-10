@@ -52,6 +52,8 @@ flutter:
     - images/check.png
     - images/mic.png
     - images/stop.jpg
+    - images/play.jpg
+    - images/pause.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

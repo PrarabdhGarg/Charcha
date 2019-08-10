@@ -7,4 +7,5 @@ class config {
   static String jwt = "";
   static FirebaseUser firebaseUser;
   static User userProfile;
+  static int fileNumber = 0;
 }

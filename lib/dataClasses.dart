@@ -14,6 +14,10 @@ enum audioPlayerState{
   Playing,Stopped,None,Loading
 }
 
+enum customRecorderAction {
+  Record, StopRecording, PlayRecording, PauseRecording
+}
+
 class Author {
   String name;
   String username;

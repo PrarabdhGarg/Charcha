@@ -33,7 +33,7 @@ class StateWidget extends StatefulWidget {
 
 class _StateWidgetState extends State<StateWidget> {
   StateModel state;
-  GoogleSignInAccount googleAccount;
+  GoogleSignInAccount googleAccount = null;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
   @override
@@ -83,11 +83,13 @@ class _StateWidgetState extends State<StateWidget> {
   }
 
   Future<Null> signInWithGoogle() async {
+    print("Entered signing in with google with ${googleAccount}");
     if (googleAccount == null) {
       // Start the sign-in process:
       googleAccount = await googleSignIn.signIn();
     }
     FirebaseUser firebaseUser = await signIntoFirebase(googleAccount);
+    await getGoogleJwt(googleAccount);
     state.user = firebaseUser; // new
     setState(() {
       state.isLoading = false;

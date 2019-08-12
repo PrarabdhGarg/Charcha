@@ -41,7 +41,6 @@ class _otherProfileState extends State<otherProfile> {
   }
 
   Future<Null> fetchOtherUser(String id) async {
-    // TODO : Change URL to get profile of other user instead of my own profile
     final response = await http.get(config.baseUrl+"/users/view_profile/$id", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
     print("Response = ${response.body.toString()}");
     if(response.statusCode == 200){

@@ -21,6 +21,8 @@ class _mainScreenState extends State<mainScreen> {
   List<feedModel> feedList = [feedModel() , feedModel() , feedModel() , feedModel() , feedModel()];
   User currentUser;
   final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey();
+  bool activeSearch = false;
+  TextEditingController searchedProfile = new TextEditingController();
 
   @override
   void initState() {
@@ -76,50 +78,7 @@ class _mainScreenState extends State<mainScreen> {
 
     return Scaffold(
       key: _scaffoldState,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        // There is an empty container passed as I don't want the default back button that appears on the app bar
-        leading: Container(),
-        title: Text(
-          'Charcha',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24
-          ),
-        ),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.add_alert , color: Color(0xFFFF6969),),
-              onPressed: () {
-                Scaffold.of(context).showSnackBar(new SnackBar(
-                  content: new Text("Notifications"),
-                ));
-              }
-          ),
-          IconButton(
-              icon: Icon(Icons.add_circle , color: Color(0xFFFF6969),),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => customAudioRecorder()));
-              }
-          ),
-          PopupMenuButton(
-           child: Icon(Icons.more_vert , color: Color(0xFFFF6969),),
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem(
-                  child: Text('Settings'),
-                ),
-                PopupMenuItem(
-                  child: GestureDetector(child: Text('Logout'),onTap:() => logoutUser(),),
-                ),
-              ];
-            },
-          ),
-          Container(
-            margin: EdgeInsets.all(8),
-          )
-        ],
-      ),
+      appBar: getAppBar(activeSearch),
       body: _TabPages[_currentIndex],
       bottomNavigationBar: bottomNavBar,
     );
@@ -154,4 +113,77 @@ class _mainScreenState extends State<mainScreen> {
     }
   }
 
+  AppBar getAppBar(bool isSearchEnabled) {
+    return isSearchEnabled ?  AppBar(
+      leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: () => setState(() => this.activeSearch = false),),
+      title: TextField(
+        controller: searchedProfile,
+        decoration: InputDecoration(
+          hintText: "here's a hint",
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            setState(() {
+              this.activeSearch = false;
+            });
+            searchProfile(searchedProfile.text);
+          },
+        )
+      ],
+    ) : AppBar(
+      backgroundColor: Colors.white,
+      // There is an empty container passed as I don't want the default back button that appears on the app bar
+      leading: Container(),
+      title: Text(
+        'Charcha',
+        style: TextStyle(
+            color: Colors.black,
+            fontSize: 24
+        ),
+      ),
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(Icons.search, color: Color(0xFFFF6969)),
+          onPressed: () => setState(() => this.activeSearch = true),
+        ),
+        IconButton(
+            icon: Icon(Icons.add_alert , color: Color(0xFFFF6969),),
+            onPressed: () {
+              Scaffold.of(context).showSnackBar(new SnackBar(
+                content: new Text("Notifications"),
+              ));
+            }
+        ),
+        IconButton(
+            icon: Icon(Icons.add_circle , color: Color(0xFFFF6969),),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => customAudioRecorder()));
+            }
+        ),
+        PopupMenuButton(
+          child: Icon(Icons.more_vert , color: Color(0xFFFF6969),),
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                child: Text('Settings'),
+              ),
+              PopupMenuItem(
+                child: GestureDetector(child: Text('Logout'),onTap:() => logoutUser(),),
+              ),
+            ];
+          },
+        ),
+        Container(
+          margin: EdgeInsets.all(8),
+        )
+      ],
+    );
+  }
+
+  Future<Null> searchProfile(String searchedProfile) async {
+
+  }
 }

@@ -20,6 +20,7 @@ class _profileState extends State<profile> {
   bool isOwnProfile;
   static int posts,followers,following;
   User user = null;
+  bool isFollowing = false;
 
   _profileState(this.profileUser);
 
@@ -32,6 +33,7 @@ class _profileState extends State<profile> {
     } else {
       isOwnProfile = false;
     }
+    print("Result of is own Profile ${isOwnProfile}");
   }
 
   final _TabPages = <Widget> [
@@ -56,8 +58,8 @@ class _profileState extends State<profile> {
               Row(
                 children: <Widget>[
                   Container(
-                      width: 150.0,
-                      height: 150.0,
+                      width: 125.0,
+                      height: 125.0,
                       padding: EdgeInsets.all(16),
                       child: Container(
                         decoration: new BoxDecoration(
@@ -130,14 +132,11 @@ class _profileState extends State<profile> {
           Flexible(
             flex: 1,
             child: FlatButton(
-                onPressed: null,
+                onPressed: () {
+                  toggleFollowing();
+                },
                 child: Container(
-                  padding: EdgeInsets.only(
-                      top: 8,
-                      bottom: 8,
-                      left: 16,
-                      right: 16
-                  ),
+                  padding: EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                     color: Colors.lightGreenAccent,
@@ -149,7 +148,7 @@ class _profileState extends State<profile> {
                       ),
                     ],
                   ),
-                  child: Text("Following" , style: TextStyle(color: Colors.white),),
+                  child: isFollowing ? Text("Following" , style: TextStyle(color: Colors.white),) : Text("Follow" , style: TextStyle(color: Colors.white),),
                 )
             ),
           ),
@@ -158,12 +157,7 @@ class _profileState extends State<profile> {
             child: FlatButton(
                 onPressed: null,
                 child: Container(
-                  padding: EdgeInsets.only(
-                      top: 8,
-                      bottom: 8,
-                      left: 16,
-                      right: 16
-                  ),
+                  padding: EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                     color: Colors.white,
@@ -175,7 +169,7 @@ class _profileState extends State<profile> {
                       ),
                     ],
                   ),
-                  child: Text("Following" , style: TextStyle(color: Color(0xFFFF6969)),),
+                  child: Text("Button" , style: TextStyle(color: Color(0xFFFF6969)),),
                 )
             ),
           )
@@ -224,10 +218,32 @@ class _profileState extends State<profile> {
       print("Profile = ${config.userProfile.following.toString()}\n${config.userProfile.followers.toString()}\n${config.userProfile.voicePosts.toString()}");
       setState(() {
         this.user = config.userProfile;
+        if(profileUser.followers.contains(user.id)){
+          this.isFollowing = true;
+        }else{
+          this.isFollowing = false;
+        }
+        print("New Following Status = $isFollowing");
       });
     }else{
       print("Error occoured in fetching user profile");
       throw Exception('Failed to load post');
     }
+  }
+
+  Future<Null> toggleFollowing() async {
+    http.post(config.baseUrl+"/users/follow_unfollow/"+user.id, headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt}).then((http.Response response) {
+      print("Response for follow is ${response.statusCode}");
+      if(response.statusCode == 200) {
+        fetchUserData();
+        setState(() {
+          this.isFollowing = !this.isFollowing;
+        });
+      }
+      else{
+        print("Error Occoured in following");
+        print(response.body.toString());
+      }
+    });
   }
 }

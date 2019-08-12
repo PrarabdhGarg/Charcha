@@ -35,8 +35,8 @@ class _mainScreenState extends State<mainScreen> {
   Widget build(BuildContext context) {
     final _TabPages = <Widget> [
       profile(currentUser),
-      FeedListWidget(),
-      FeedListWidget(),
+      FeedListWidget(isTrending: false,),
+      trendingFeed(),
       Genre(selectMultiple: false,),
     ];
     final _BottomNavBarItems = <BottomNavigationBarItem> [

@@ -10,8 +10,13 @@ import 'audioControl.dart';
 import 'otherProfile.dart';
 
 class FeedListWidget extends StatefulWidget {
+
+  bool isTrending = false;
+
+  FeedListWidget({this.isTrending});
+
   @override
-  _FeedListWidgetState createState() => _FeedListWidgetState();
+  _FeedListWidgetState createState() => _FeedListWidgetState(isTrending: this.isTrending);
 }
 
 class _FeedListWidgetState extends State<FeedListWidget> {
@@ -19,6 +24,9 @@ class _FeedListWidgetState extends State<FeedListWidget> {
   Posts newsFeed = null;
   String currentSong = "";
   audioPlayerState songState;
+  bool isTrending;
+
+  _FeedListWidgetState({this.isTrending});
 
   @override
   void initState() {
@@ -40,7 +48,16 @@ class _FeedListWidgetState extends State<FeedListWidget> {
   }
 
   Future<Null> getNewsFeed() async {
-    final response = await http.get(config.baseUrl+"/newsfeed?skip=0&limit=2", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
+    var appendUrl = "";
+    if(isTrending){
+      print("Entered Trending");
+      appendUrl = "/trending?skip=0&limit=20";
+    }
+    else {
+      print("Entered Normal");
+      appendUrl = "/newsfeed?skip=0&limit=20";
+    }
+    final response = await http.get(config.baseUrl+appendUrl, headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
     print("Response = ${response.body.toString()}");
     if(response.statusCode == 200) {
       setState(() {
@@ -325,4 +342,12 @@ class _FeedListWidgetState extends State<FeedListWidget> {
     );
   }
 }
+
+class trendingFeed extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FeedListWidget(isTrending: true,);
+  }
+}
+
 

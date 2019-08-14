@@ -138,111 +138,115 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
           child: Text("Create", style: TextStyle(color: Colors.black, fontSize: 24),),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: (MediaQuery.of(context).size.height*0.35),
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
-                      flex: 1,
-                      child: Container(),
-                    ),
-                    Flexible(
-                      flex: 3,
-                      child: MaterialButton(
-                        onPressed: () {
-                          switch(recorderAction){
-                            case customRecorderAction.Record:
-                              startRecording();
-                              setState(() {
-                                this.recorderAction = customRecorderAction.StopRecording;
-                              });
-                              break;
-                            case customRecorderAction.StopRecording:
-                              stopRecording();
-                              setState(() {
-                                this.recorderAction = customRecorderAction.PlayRecording;
-                              });
-                              break;
-                            case customRecorderAction.PlayRecording:
-                              startPlaying();
-                              setState(() {
-                                this.recorderAction = customRecorderAction.PauseRecording;
-                              });
-                              break;
-                            case customRecorderAction.PauseRecording:
-                              pauseRecordedSound();
-                              setState(() {
-                                this.recorderAction = customRecorderAction.PlayRecording;
-                              });
-                              break;
-                          }
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(16),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(this.context).size.width,
+            height: MediaQuery.of(this.context).size.height,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: (MediaQuery.of(context).size.height*0.35),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                      Flexible(
+                        flex: 3,
+                        child: MaterialButton(
+                          onPressed: () {
+                            switch(recorderAction){
+                              case customRecorderAction.Record:
+                                startRecording();
+                                setState(() {
+                                  this.recorderAction = customRecorderAction.StopRecording;
+                                });
+                                break;
+                              case customRecorderAction.StopRecording:
+                                stopRecording();
+                                setState(() {
+                                  this.recorderAction = customRecorderAction.PlayRecording;
+                                });
+                                break;
+                              case customRecorderAction.PlayRecording:
+                                startPlaying();
+                                setState(() {
+                                  this.recorderAction = customRecorderAction.PauseRecording;
+                                });
+                                break;
+                              case customRecorderAction.PauseRecording:
+                                pauseRecordedSound();
+                                setState(() {
+                                  this.recorderAction = customRecorderAction.PlayRecording;
+                                });
+                                break;
+                            }
+                          },
                           child: Container(
-                            decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: recorderImage ,
-                              )
-                            ),
-                          )
+                            padding: EdgeInsets.all(16),
+                            child: Container(
+                              decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: recorderImage ,
+                                )
+                              ),
+                            )
+                          ),
                         ),
                       ),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: Container(),
-                    ),
-                  ],
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Caption",
-                    contentPadding: EdgeInsets.all(16)
+                      Flexible(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                    ],
                   ),
-                  controller: caption,
                 ),
-              ),
-              Flexible(
-                flex: 3,
-                child: TextField(
-                  maxLength: 183,
-                  decoration: InputDecoration(
-                    hintText: "Description",
-                    contentPadding: EdgeInsets.all(16),
-                  ),
-                  controller: description,
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: TextField(
-                  decoration: InputDecoration(
-                      hintText: "Hash Tags",
+                Flexible(
+                  flex: 1,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Caption",
                       contentPadding: EdgeInsets.all(16)
+                    ),
+                    controller: caption,
                   ),
-                  controller: genreTags,
                 ),
-              ),
-              Flexible(
-                flex: 1,
-                child: RaisedButton(
-                    child: new Text("Post"),
-                    onPressed: () {
-                      postRecording(caption.text, description.text);
-                    },
-                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                Flexible(
+                  flex: 3,
+                  child: TextField(
+                    maxLength: 183,
+                    decoration: InputDecoration(
+                      hintText: "Description",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    controller: description,
+                  ),
                 ),
-              )
-            ],
+                Flexible(
+                  flex: 1,
+                  child: TextField(
+                    decoration: InputDecoration(
+                        hintText: "Hash Tags",
+                        contentPadding: EdgeInsets.all(16)
+                    ),
+                    controller: genreTags,
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: RaisedButton(
+                      child: new Text("Post"),
+                      onPressed: () {
+                        postRecording(caption.text, description.text);
+                      },
+                      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

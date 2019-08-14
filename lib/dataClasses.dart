@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class feedModel {
@@ -16,6 +14,18 @@ enum audioPlayerState{
 
 enum customRecorderAction {
   Record, StopRecording, PlayRecording, PauseRecording
+}
+
+class Profiles {
+  List<User> profiles;
+
+  Profiles({
+    this.profiles
+  });
+
+  factory Profiles.fromJSON(List<dynamic> json) => new Profiles(
+    profiles: json.map((json) => User.fromJson(json)).toList()
+  );
 }
 
 class Author {

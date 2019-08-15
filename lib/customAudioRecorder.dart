@@ -9,7 +9,9 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:charcha/config.dart';
 import 'dart:async';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:charcha/dataClasses.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class customAudioRecorder extends StatefulWidget {
   @override
@@ -24,8 +26,10 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
   AudioRecorder audioRecorder;
   File defaultFile;
   bool recordingCompleted = false;
+  bool isPosting = false;
   Recording _recording;
   String finalPath = "/FileTest";
+  int fileNumber = 100;
   TextEditingController caption = new TextEditingController();
   TextEditingController description = new TextEditingController();
   TextEditingController genreTags = new TextEditingController();
@@ -35,7 +39,7 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
     bool isRecording = await AudioRecorder.isRecording;
     Directory docDir = await getExternalStorageDirectory();
     print(docDir.toString());
-    config.fileNumber++;
+    saveFileNumber();
     setState(() {
       this.isRecording = isRecording;
       this.recordingCompleted = true;
@@ -46,7 +50,7 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
   startRecording() async {
     Directory docDir = await getExternalStorageDirectory();
     print(docDir.path.toString());
-    String newFilePath = docDir.path + finalPath + config.fileNumber.toString();
+    String newFilePath = docDir.path + finalPath + fileNumber.toString();
     print(newFilePath);
     File tempAudioFile = File(newFilePath);
     print(tempAudioFile);
@@ -57,15 +61,7 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
     }else{
       print("Entered Else");
     }
-    try{
-      await AudioRecorder.start(path: newFilePath , audioOutputFormat: AudioOutputFormat.AAC);
-    }catch(Exception){
-      print("Enteresd Catch");
-      config.fileNumber++;
-      var fileStoragePath = docDir.path + finalPath + config.fileNumber.toString();
-      print("New file = ${fileStoragePath}");
-      await AudioRecorder.start(path: fileStoragePath , audioOutputFormat: AudioOutputFormat.AAC);
-    }
+    await AudioRecorder.start(path: newFilePath , audioOutputFormat: AudioOutputFormat.AAC);
     bool isRec = await AudioRecorder.isRecording;
     setState(() {
       this._recording =  new Recording(duration: new Duration(), path: newFilePath);
@@ -81,13 +77,14 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
     audioRecorder = new AudioRecorder();
     audioPlayer = new AudioPlayer();
     dio = new Dio();
+    getFileNumber();
     dio.options.baseUrl = config.baseUrl;
     dio.options.followRedirects = false;
   }
 
   Future<Null> postRecording(String caption, String title) async {
     Directory docDir = await getExternalStorageDirectory();
-    String newFilePath = docDir.path + finalPath + (config.fileNumber-1).toString() + ".m4a";
+    String newFilePath = docDir.path + finalPath + (fileNumber).toString() + ".m4a";
     var postUri = Uri.parse(config.baseUrl+"/voice-posts/upload");
     var request = new http.MultipartRequest("POST", postUri);
     request.fields['title'] = title;
@@ -102,9 +99,15 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
     request.files.add(new http.MultipartFile('voicePost', audio, length, filename: basename(audioFile.path)));
     request.send().then((response){
       print(response.statusCode);
+      if(response.statusCode == 201) {
+        Fluttertoast.showToast(msg: "Succesfully Posted",toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM);
+      }
     });
     setState(() {
+      isPosting = false;
       this.recorderAction = customRecorderAction.Record;
+      closeRecorder(this.context);
     });
   }
 
@@ -126,7 +129,7 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
         break;
     }
 
-    return Scaffold(
+    return isPosting ? Center(child: CircularProgressIndicator(),) : Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         leading: IconButton(
@@ -240,6 +243,9 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
                   child: RaisedButton(
                       child: new Text("Post"),
                       onPressed: () {
+                        setState(() {
+                          isPosting = true;
+                        });
                         postRecording(caption.text, description.text);
                       },
                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))
@@ -255,12 +261,27 @@ class _customAudioRecorderState extends State<customAudioRecorder> {
 
   Future<Null> startPlaying() async {
     Directory docDir = await getExternalStorageDirectory();
-    String newFilePath = docDir.path + finalPath + (config.fileNumber-1).toString() + ".m4a";
+    String newFilePath = docDir.path + finalPath + (fileNumber).toString() + ".m4a";
     await audioPlayer.play(newFilePath , isLocal: true);
   }
 
   Future<Null> pauseRecordedSound() async {
     await audioPlayer.pause();
+  }
+
+  Future<Null> closeRecorder(BuildContext context) async {
+    // Navigator.pop(context);
+  }
+  
+  Future<Null> getFileNumber() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    fileNumber = prefs.getInt("number") ?? 100;
+  }
+  
+  Future<Null> saveFileNumber() async {
+    var x = fileNumber + 1;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt("number", x);
   }
 
   @override

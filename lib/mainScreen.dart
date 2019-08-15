@@ -93,11 +93,17 @@ class _mainScreenState extends State<mainScreen> {
         if(response.statusCode == 200) {
           config.jwt = "";
           config.userProfile = null;
+          deleteJWT();
           // Todo : Handle navigation properly
           Navigator.popAndPushNamed(context, "/login");
         }
       });
     }
+  }
+
+  Future<Null> deleteJWT() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("JWT", " ");
   }
 
   Future<Null> fetchUserData() async {

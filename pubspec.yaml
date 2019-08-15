@@ -29,6 +29,7 @@ dependencies:
   path: ^1.6.2
   shared_preferences: ^0.5.3+4
   dio: ^2.1.13
+  fluttertoast: ^3.1.0
 
 
 dev_dependencies:

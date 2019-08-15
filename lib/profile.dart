@@ -21,6 +21,8 @@ class _profileState extends State<profile> {
   static int posts,followers,following;
   User user = null;
   bool isFollowing = false;
+  List<Post> userPosts;
+  bool fetchingPosts = true;
 
   _profileState(this.profileUser);
 
@@ -36,20 +38,20 @@ class _profileState extends State<profile> {
     print("Result of is own Profile ${isOwnProfile}");
   }
 
-  final _TabPages = <Widget> [
-    Center(child: Text("My Posts")),
-    Center(child: Text("My Followers")),
-    Center(child: Text("Following"),)
-  ];
-
-  final _Tabs = <Tab>[
-    Tab(child: Text(posts.toString() + "\nPost", style: TextStyle(color: Colors.black),),),
-    Tab(child: Text("${followers}\nFollowers", style: TextStyle(color: Colors.black),),),
-    Tab(child: Text("${following}\nFollowing",style: TextStyle(color: Colors.black),),)
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final _TabPages = <Widget> [
+      Center(child: getPostsList()),
+      Center(child: Text("My Followers\nComing Soon")),
+      Center(child: Text("Following\nComing Soon"),)
+    ];
+
+    final _Tabs = <Tab>[
+      Tab(child: Text(posts.toString() + "\nPost", style: TextStyle(color: Colors.black),),),
+      Tab(child: Text("${followers}\nFollowers", style: TextStyle(color: Colors.black),),),
+      Tab(child: Text("${following}\nFollowing",style: TextStyle(color: Colors.black),),)
+    ];
+
     posts = profileUser.voicePosts.length;
     followers = profileUser.followers.length;
     following = profileUser.following.length;
@@ -209,6 +211,31 @@ class _profileState extends State<profile> {
     }
   }
 
+  Widget getPostsList() {
+    return fetchingPosts ? Center(child: CircularProgressIndicator(),) : userPosts.length == 0 ? Center(child: Text("You have no posts"),) : ListView.builder(
+      itemCount: userPosts.length,
+      itemBuilder: (BuildContext context, int i) {
+        return Container(
+          height: 100,
+          margin: EdgeInsets.all(8.0),
+          color: Colors.lightGreenAccent,
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: Text(userPosts[i].title),
+              ),
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: Text(userPosts[i].caption),
+              )
+            ],
+          ),
+        );
+      }
+    );
+  }
+
   Future<Null> fetchUserData() async {
     print("Entered Profile request");
     final response = await http.get(config.baseUrl+"/users/me", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt},);
@@ -224,10 +251,29 @@ class _profileState extends State<profile> {
           this.isFollowing = false;
         }
         print("New Following Status = $isFollowing");
+        fetchPosts();
       });
     }else{
       print("Error occoured in fetching user profile");
       throw Exception('Failed to load post');
+    }
+  }
+
+  Future<Null> fetchPosts() async {
+    userPosts = new List();
+    user.voicePosts.forEach((post) {
+      print("Post =  ${post.toString()}");
+      getPost(post.toString());
+    });
+  }
+
+  Future<Null> getPost(String id) async {
+    final response = await http.get(config.baseUrl+"/voice_post/get_details/${id.toString()}", headers: {HttpHeaders.authorizationHeader: "Bearer " + config.jwt});
+    if(response.statusCode == 200) {
+      userPosts.add(Post.fromJSON(json.decode(response.body)));
+      setState(() {
+        this.fetchingPosts = false;
+      });
     }
   }
 
